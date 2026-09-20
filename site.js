@@ -35,6 +35,17 @@ if (revealEls.length) {
   revealEls.forEach(el => revealObserver.observe(el));
 }
 
+// Process timeline — steps activate as they enter view
+const tlSteps = document.querySelectorAll('.tl-step');
+if (tlSteps.length) {
+  const tlObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('active');
+    });
+  }, { threshold: 0.5 });
+  tlSteps.forEach(step => tlObserver.observe(step));
+}
+
 // FAQ accordion
 document.querySelectorAll('.faq-item').forEach(item => {
   const q = item.querySelector('.faq-q');

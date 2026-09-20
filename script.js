@@ -43,11 +43,12 @@ function animateStats() {
   counted = true;
   counts.forEach(el => {
     const target = parseInt(el.dataset.target, 10);
+    const floor = Math.round(target * 0.6); // never dip to 0 — count up from a visible baseline
     const duration = 1300;
     const start = performance.now();
     function tick(now) {
       const progress = Math.min((now - start) / duration, 1);
-      el.textContent = Math.floor(progress * target);
+      el.textContent = Math.floor(floor + progress * (target - floor));
       if (progress < 1) requestAnimationFrame(tick);
       else el.textContent = target;
     }
@@ -139,6 +140,7 @@ if (quoteForm) {
   quoteForm.addEventListener('submit', (e) => {
     e.preventDefault();
     const data = new FormData(quoteForm);
+    if (data.get('website')) return; // honeypot triggered — likely spam, silently ignore
     const lines = [
       'Merhaba, teklif formu üzerinden ulaşıyorum:',
       `Ad Soyad: ${data.get('adSoyad') || '-'}`,
@@ -147,6 +149,7 @@ if (quoteForm) {
       `İş Türü: ${data.get('isTuru') || '-'}`,
       `Lokasyon: ${data.get('lokasyon') || '-'}`,
       `Tahmini İş Tarihi: ${data.get('tarih') || '-'}`,
+      `Yaklaşık İş Büyüklüğü: ${data.get('isBuyuklugu') || '-'}`,
       `Mesaj: ${data.get('mesaj') || '-'}`
     ];
     const text = encodeURIComponent(lines.join('\n'));
