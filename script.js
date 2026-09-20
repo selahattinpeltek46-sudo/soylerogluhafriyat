@@ -86,16 +86,20 @@ if (tlSteps.length) {
   tlSteps.forEach(step => tlObserver.observe(step));
 }
 
-// Masonry lightbox
+// Masonry + Sahadan lightbox (shared modal)
 const masonry = document.getElementById('masonry');
+const sahadanGrid = document.getElementById('sahadanGrid');
 const lightbox = document.getElementById('lightbox');
 const lightboxImg = document.getElementById('lightboxImg');
 const lightboxClose = document.getElementById('lightboxClose');
 const lightboxPrev = document.getElementById('lightboxPrev');
 const lightboxNext = document.getElementById('lightboxNext');
 
-if (masonry) {
-  const items = Array.from(masonry.querySelectorAll('.masonry-item[data-full]'));
+if (masonry || sahadanGrid) {
+  const items = [
+    ...(masonry ? Array.from(masonry.querySelectorAll('.masonry-item[data-full]')) : []),
+    ...(sahadanGrid ? Array.from(sahadanGrid.querySelectorAll('.sahadan-photo[data-full]')) : [])
+  ];
   let currentIndex = 0;
 
   function openLightbox(index) {
@@ -133,6 +137,22 @@ if (masonry) {
     if (e.key === 'ArrowRight') showRelative(1);
   });
 }
+
+// Sahadan videos — click-to-load (no MP4 request until the user actually plays it)
+document.querySelectorAll('.sahadan-video[data-video-src]').forEach(tile => {
+  tile.addEventListener('click', () => {
+    const src = tile.dataset.videoSrc;
+    if (!src) return;
+    const video = document.createElement('video');
+    video.controls = true;
+    video.playsInline = true;
+    video.preload = 'none';
+    video.src = src;
+    tile.innerHTML = '';
+    tile.appendChild(video);
+    video.play();
+  }, { once: true });
+});
 
 // Quote form — builds a WhatsApp message (no backend on GitHub Pages)
 const quoteForm = document.getElementById('quoteForm');
