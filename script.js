@@ -132,3 +132,24 @@ if (masonry) {
     if (e.key === 'ArrowRight') showRelative(1);
   });
 }
+
+// Quote form — builds a WhatsApp message (no backend on GitHub Pages)
+const quoteForm = document.getElementById('quoteForm');
+if (quoteForm) {
+  quoteForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const data = new FormData(quoteForm);
+    const lines = [
+      'Merhaba, teklif formu üzerinden ulaşıyorum:',
+      `Ad Soyad: ${data.get('adSoyad') || '-'}`,
+      `Telefon: ${data.get('telefon') || '-'}`,
+      `Firma Adı: ${data.get('firma') || '-'}`,
+      `İş Türü: ${data.get('isTuru') || '-'}`,
+      `Lokasyon: ${data.get('lokasyon') || '-'}`,
+      `Tahmini İş Tarihi: ${data.get('tarih') || '-'}`,
+      `Mesaj: ${data.get('mesaj') || '-'}`
+    ];
+    const text = encodeURIComponent(lines.join('\n'));
+    window.open(`https://wa.me/905376157437?text=${text}`, '_blank', 'noopener');
+  });
+}
