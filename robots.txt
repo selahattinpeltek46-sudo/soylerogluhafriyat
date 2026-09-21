@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://selahattinpeltek46-sudo.github.io/soylerogluhafriyat/sitemap.xml
+Sitemap: https://soylerogluhafriyat.com/sitemap.xml
